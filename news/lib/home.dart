@@ -1,4 +1,6 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_controller.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -93,9 +95,42 @@ class _HomeState extends State<Home> {
                 );
               },
             ),
-          )
+          ),
+          CarouselSlider(
+            options: CarouselOptions(
+              height: 200,
+              autoPlay: true,
+              autoPlayInterval: const Duration(seconds: 3),
+              autoPlayAnimationDuration: const Duration(milliseconds: 800),
+              autoPlayCurve: Curves.fastOutSlowIn,
+              enlargeCenterPage: true,
+              scrollDirection: Axis.horizontal,
+              enableInfiniteScroll: false,
+            ),
+            items: items.map(
+              (item) {
+                return Builder(
+                  builder: (BuildContext context) {
+                    return InkWell(
+                      onTap: (){
+                        print("Tapped");
+                      
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 5.0, vertical: 14.0),
+                        child: Text(item),
+                      ),
+                    );
+                  },
+                );
+              },
+            ).toList(),
+          ),
         ],
       ),
     );
   }
+
+  final List items = ['Prem', 'Welcome', 'learn and earn'];
 }
