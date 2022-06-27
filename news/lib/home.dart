@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:news/model.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -10,14 +14,60 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   TextEditingController searchController = new TextEditingController();
+  List<NewsQueryModel> newsModelList = <NewsQueryModel>[];
+  List<NewsQueryModel> newsModelListCarousel = <NewsQueryModel>[];
   List<String> navBarItem = [
-    "Business",
-    "Entertainment",
-    "Health",
-    "Science",
-    "Sports",
-    "Technology"
+    "Top News",
+    "United Kingdom",
+    "World",
+    "Financial",
+    "Health"
   ];
+
+  bool isLoading = true;
+  getNewsByQuery() async {
+    String url =
+        "https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=b8fc250dcc50454e9d55db485e94c195";
+    Response response = await get(Uri.parse(url));
+    Map data = jsonDecode(response.body);
+
+    setState(() {
+      data['articles'].forEach((element) {
+        NewsQueryModel newsQueryModel = new NewsQueryModel();
+        newsQueryModel = NewsQueryModel.fromMap(element);
+        newsModelList.add(newsQueryModel);
+        setState(() {
+          isLoading = false;
+        });
+      });
+    });
+  }
+
+  getNewsofUK() async {
+    String url =
+        'https://newsapi.org/v2/top-headlines?country=gb&apiKey=b8fc250dcc50454e9d55db485e94c195';
+    Response response = await get(Uri.parse(url));
+    Map data = jsonDecode(response.body);
+
+    setState(() {
+      data['articles'].forEach((element) {
+        NewsQueryModel newsQueryModel = new NewsQueryModel();
+        newsQueryModel = NewsQueryModel.fromMap(element);
+        newsModelListCarousel.add(newsQueryModel);
+        setState(() {
+          isLoading = false;
+        });
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getNewsByQuery();
+    getNewsofUK();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,7 +156,7 @@ class _HomeState extends State<Home> {
                   scrollDirection: Axis.horizontal,
                   enableInfiniteScroll: false,
                 ),
-                items: items.map((item) {
+                items: newsModelListCarousel.map((instance) {
                   return Builder(builder: (BuildContext context) {
                     return Container(
                       child: Card(
@@ -117,10 +167,9 @@ class _HomeState extends State<Home> {
                           children: [
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: Image.asset(
-                                'assets/images/prem.jpg',
-                                fit: BoxFit.fitHeight,
-                                height: double.infinity,
+                              child: Image.network(
+                                instance.newsImg,
+                                fit: BoxFit.cover,
                               ),
                             ),
                             Positioned(
@@ -141,12 +190,16 @@ class _HomeState extends State<Home> {
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 7, vertical: 10),
-                                  child: const Text(
-                                    'News Headline',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                                  child: Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        vertical: 10),
+                                    child: Text(
+                                      instance.newsHead,
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -181,7 +234,7 @@ class _HomeState extends State<Home> {
                   ListView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: 10,
+                    itemCount: newsModelList.length,
                     itemBuilder: (context, index) {
                       return Container(
                         margin: const EdgeInsets.symmetric(
@@ -195,14 +248,15 @@ class _HomeState extends State<Home> {
                             children: [
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(18),
-                                child: Image.asset("assets/images/prem.jpg"),
+                                child: Image.network(
+                                    newsModelList[index].newsImg,
+                                    fit: BoxFit.cover),
                               ),
                               Positioned(
                                 left: 0,
                                 right: 0,
                                 bottom: 0,
                                 child: Container(
-                                  height: 70,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
                                     gradient: LinearGradient(
@@ -219,17 +273,17 @@ class _HomeState extends State<Home> {
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
-                                    children: const [
+                                    children: [
                                       Text(
-                                        'News Headline',
-                                        style: TextStyle(
+                                        newsModelList[index].newsHead,
+                                        style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                        'This is the news description',
-                                        style: TextStyle(
+                                        newsModelList[index].newsAuthor,
+                                        style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 14,
                                         ),

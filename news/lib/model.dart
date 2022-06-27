@@ -1,24 +1,22 @@
 class NewsQueryModel {
   late String newsHead;
   late String newsDes;
-  late String newsImage;
+  late String newsImg;
   late String newsUrl;
+  late String newsAuthor;
+  NewsQueryModel(
+      {this.newsHead = "NEWS HEADLINE",
+      this.newsDes = "SOME NEWS",
+      this.newsImg = "SOME URL",
+      this.newsUrl = "SOME URL",
+      this.newsAuthor = "Author"});
 
-  NewsQueryModel({
-    this.newsHead='News Headline',
-    this.newsDes='News Description',
-    this.newsImage='image url',
-    this.newsUrl='news url',
-  });
-
-  factory NewsQueryModel.fromMap(Map news){
+  factory NewsQueryModel.fromMap(Map news) {
     return NewsQueryModel(
-      newsHead: news['title'],
-      newsDes: news['description'],
-      newsImage: news['urltoimage'],
-      newsUrl: news['newsUrl'],
-    );
-
+        newsHead: news["title"],
+        newsDes: news["description"],
+        newsImg: news["urlToImage"],
+        newsUrl: news["url"],
+        newsAuthor: news["author"]);
   }
 }
-
