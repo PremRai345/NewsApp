@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:news/category.dart';
 import 'package:news/model.dart';
 
 class Home extends StatefulWidget {
@@ -45,7 +46,7 @@ class _HomeState extends State<Home> {
 
   getNewsofUK() async {
     String url =
-        'https://newsapi.org/v2/top-headlines?country=gb&apiKey=b8fc250dcc50454e9d55db485e94c195';
+        'https://newsapi.org/v2/everything?q=apple&from=2022-06-27&to=2022-06-27&sortBy=popularity&apiKey=b8fc250dcc50454e9d55db485e94c195';
     Response response = await get(Uri.parse(url));
     Map data = jsonDecode(response.body);
 
@@ -124,7 +125,11 @@ class _HomeState extends State<Home> {
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () {
-                      print(navBarItem[index]);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  Category(Query: navBarItem[index])));
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
