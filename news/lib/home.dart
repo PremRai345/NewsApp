@@ -153,70 +153,74 @@ class _HomeState extends State<Home> {
             ),
             Container(
               margin: const EdgeInsets.symmetric(vertical: 15),
-              child: CarouselSlider(
-                options: CarouselOptions(
-                  height: 200,
-                  autoPlay: true,
-                  enlargeCenterPage: true,
-                  scrollDirection: Axis.horizontal,
-                  enableInfiniteScroll: false,
-                ),
-                items: newsModelListCarousel.map((instance) {
-                  return Builder(builder: (BuildContext context) {
-                    return Container(
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Stack(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                instance.newsImg,
-                                fit: BoxFit.cover,
+              child: isLoading
+                  ? Container(
+                      height: 200,
+                      child: const Center(child: CircularProgressIndicator()))
+                  : CarouselSlider(
+                      options: CarouselOptions(
+                        height: 200,
+                        autoPlay: true,
+                        enlargeCenterPage: true,
+                        scrollDirection: Axis.horizontal,
+                        enableInfiniteScroll: false,
+                      ),
+                      items: newsModelListCarousel.map((instance) {
+                        return Builder(builder: (BuildContext context) {
+                          return Container(
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                            ),
-                            Positioned(
-                              left: 0,
-                              right: 0,
-                              bottom: 0,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  gradient: LinearGradient(
-                                      colors: [
-                                        Colors.black12.withOpacity(0),
-                                        Colors.black,
-                                      ],
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter),
-                                ),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 7, vertical: 10),
-                                  child: Container(
-                                    margin: const EdgeInsets.symmetric(
-                                        vertical: 10),
-                                    child: Text(
-                                      instance.newsHead,
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
+                              child: Stack(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.network(
+                                      instance.newsImg,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  Positioned(
+                                    left: 0,
+                                    right: 0,
+                                    bottom: 0,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        gradient: LinearGradient(
+                                            colors: [
+                                              Colors.black12.withOpacity(0),
+                                              Colors.black,
+                                            ],
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter),
+                                      ),
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 7, vertical: 10),
+                                        child: Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 10),
+                                          child: Text(
+                                            instance.newsHead,
+                                            style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    );
-                  });
-                }).toList(),
-              ),
+                          );
+                        });
+                      }).toList(),
+                    ),
             ),
             Container(
               child: Column(
@@ -236,73 +240,83 @@ class _HomeState extends State<Home> {
                       ],
                     ),
                   ),
-                  ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: newsModelList.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 5),
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24),
+                  isLoading
+                      ? Container(
+                          height: MediaQuery.of(context).size.height - 450,
+                          child: Center(
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
                           ),
-                          elevation: 1.0,
-                          child: Stack(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(18),
-                                child: Image.network(
-                                    newsModelList[index].newsImg,
-                                    fit: BoxFit.cover),
-                              ),
-                              Positioned(
-                                left: 0,
-                                right: 0,
-                                bottom: 0,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Colors.black12.withOpacity(0.0),
-                                        Colors.black,
-                                      ],
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
+                        )
+                      : ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: newsModelList.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(24),
+                                ),
+                                elevation: 1.0,
+                                child: Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(18),
+                                      child: Image.network(
+                                          newsModelList[index].newsImg,
+                                          fit: BoxFit.cover),
                                     ),
-                                  ),
-                                  padding:
-                                      const EdgeInsets.fromLTRB(15, 15, 10, 8),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        newsModelList[index].newsHead,
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        newsModelList[index].newsAuthor,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14,
+                                    Positioned(
+                                      left: 0,
+                                      right: 0,
+                                      bottom: 0,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          gradient: LinearGradient(
+                                            colors: [
+                                              Colors.black12.withOpacity(0.0),
+                                              Colors.black,
+                                            ],
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                          ),
+                                        ),
+                                        padding: const EdgeInsets.fromLTRB(
+                                            15, 15, 10, 8),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              newsModelList[index].newsHead,
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              newsModelList[index].newsAuthor,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
                   Container(
                     padding: const EdgeInsets.fromLTRB(0, 10, 0, 5),
                     child: Row(
