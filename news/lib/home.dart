@@ -97,15 +97,21 @@ class _HomeState extends State<Home> {
                       if ((searchController.text).replaceAll(" ", "") == "") {
                         print("Blank search");
                       } else {
-                        // Navigator.push(context, MaterialPageRoute(builder: (context) => Search(searchController.text)));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                Category(Query: searchController.text),
+                          ),
+                        );
                       }
                     },
                     child: Container(
-                      child: Icon(
+                      child:Icon(
                         Icons.search,
                         color: Colors.blueAccent,
                       ),
-                      margin: EdgeInsets.fromLTRB(3, 0, 7, 0),
+                      margin: const EdgeInsets.fromLTRB(3, 0, 7, 0),
                     ),
                   ),
                   Expanded(
@@ -113,9 +119,16 @@ class _HomeState extends State<Home> {
                       controller: searchController,
                       textInputAction: TextInputAction.search,
                       onSubmitted: (value) {
-                        print(value);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                Category(Query: value),
+                          ),
+                        );
+                        
                       },
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           border: InputBorder.none, hintText: "Search"),
                     ),
                   )
