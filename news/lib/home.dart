@@ -27,20 +27,32 @@ class _HomeState extends State<Home> {
 
   bool isLoading = true;
   getNewsByQuery() async {
+    Map element;
+    int i = 0;
     String url =
         "https://newsapi.org/v2/everything?domains=wsj.com&apiKey=b8fc250dcc50454e9d55db485e94c195";
     Response response = await get(Uri.parse(url));
     Map data = jsonDecode(response.body);
 
     setState(() {
-      data['articles'].forEach((element) {
-        NewsQueryModel newsQueryModel = new NewsQueryModel();
-        newsQueryModel = NewsQueryModel.fromMap(element);
-        newsModelList.add(newsQueryModel);
-        setState(() {
-          isLoading = false;
-        });
-      });
+      for (element in data["articles"]) {
+        try {
+          i++;
+
+          NewsQueryModel newsQueryModel = new NewsQueryModel();
+          newsQueryModel = NewsQueryModel.fromMap(element);
+          newsModelList.add(newsQueryModel);
+          setState(() {
+            isLoading = false;
+          });
+
+          if (i == 5) {
+            break;
+          }
+        } catch (e) {
+          print(e);
+        }
+      }
     });
   }
 
@@ -107,7 +119,7 @@ class _HomeState extends State<Home> {
                       }
                     },
                     child: Container(
-                      child:Icon(
+                      child: Icon(
                         Icons.search,
                         color: Colors.blueAccent,
                       ),
@@ -122,11 +134,9 @@ class _HomeState extends State<Home> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                Category(Query: value),
+                            builder: (context) => Category(Query: value),
                           ),
                         );
-                        
                       },
                       decoration: const InputDecoration(
                           border: InputBorder.none, hintText: "Search"),
@@ -186,57 +196,63 @@ class _HomeState extends State<Home> {
                       ),
                       items: newsModelListCarousel.map((instance) {
                         return Builder(builder: (BuildContext context) {
-                          return Container(
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Stack(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.network(
-                                      instance.newsImg,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  Positioned(
-                                    left: 0,
-                                    right: 0,
-                                    bottom: 0,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        gradient: LinearGradient(
-                                            colors: [
-                                              Colors.black12.withOpacity(0),
-                                              Colors.black,
-                                            ],
-                                            begin: Alignment.topCenter,
-                                            end: Alignment.bottomCenter),
+                          try {
+                            return Container(
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.network(
+                                        instance.newsImg,
+                                        fit: BoxFit.cover,
                                       ),
+                                    ),
+                                    Positioned(
+                                      left: 0,
+                                      right: 0,
+                                      bottom: 0,
                                       child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 7, vertical: 10),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          gradient: LinearGradient(
+                                              colors: [
+                                                Colors.black12.withOpacity(0),
+                                                Colors.black,
+                                              ],
+                                              begin: Alignment.topCenter,
+                                              end: Alignment.bottomCenter),
+                                        ),
                                         child: Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              vertical: 10),
-                                          child: Text(
-                                            instance.newsHead,
-                                            style: const TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 7, vertical: 10),
+                                          child: Container(
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical: 10),
+                                            child: Text(
+                                              instance.newsHead,
+                                              style: const TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                          } catch (e) {
+                            print(e);
+                            return Container();
+                          }
                         });
                       }).toList(),
                     ),
@@ -273,67 +289,73 @@ class _HomeState extends State<Home> {
                           shrinkWrap: true,
                           itemCount: newsModelList.length,
                           itemBuilder: (context, index) {
-                            return Container(
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(24),
-                                ),
-                                elevation: 1.0,
-                                child: Stack(
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(18),
-                                      child: Image.network(
-                                          newsModelList[index].newsImg,
-                                          fit: BoxFit.cover),
-                                    ),
-                                    Positioned(
-                                      left: 0,
-                                      right: 0,
-                                      bottom: 0,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          gradient: LinearGradient(
-                                            colors: [
-                                              Colors.black12.withOpacity(0.0),
-                                              Colors.black,
+                            try {
+                              return Container(
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(24),
+                                  ),
+                                  elevation: 1.0,
+                                  child: Stack(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(18),
+                                        child: Image.network(
+                                            newsModelList[index].newsImg,
+                                            fit: BoxFit.cover),
+                                      ),
+                                      Positioned(
+                                        left: 0,
+                                        right: 0,
+                                        bottom: 0,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                Colors.black12.withOpacity(0.0),
+                                                Colors.black,
+                                              ],
+                                              begin: Alignment.topCenter,
+                                              end: Alignment.bottomCenter,
+                                            ),
+                                          ),
+                                          padding: const EdgeInsets.fromLTRB(
+                                              15, 15, 10, 8),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                newsModelList[index].newsHead,
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Text(
+                                                newsModelList[index].newsAuthor,
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
                                             ],
-                                            begin: Alignment.topCenter,
-                                            end: Alignment.bottomCenter,
                                           ),
                                         ),
-                                        padding: const EdgeInsets.fromLTRB(
-                                            15, 15, 10, 8),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              newsModelList[index].newsHead,
-                                              style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                              newsModelList[index].newsAuthor,
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
+                              );
+                            } catch (e) {
+                              print(e);
+                              return Container();
+                            }
                           },
                         ),
                   Container(

@@ -77,7 +77,7 @@ class _CategoryState extends State<Category> {
                   ],
                 ),
               ),
-              isLoading
+              isLoading 
                   ? Container(
                       height: MediaQuery.of(context).size.height - 500,
                       child: Center(
@@ -87,6 +87,7 @@ class _CategoryState extends State<Category> {
                       ),
                     )
                   : ListView.builder(
+                    
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: newsModelList.length,
