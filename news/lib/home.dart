@@ -28,7 +28,7 @@ class _HomeState extends State<Home> {
   bool isLoading = true;
   getNewsByQuery() async {
     String url =
-        "https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=b8fc250dcc50454e9d55db485e94c195";
+        "https://newsapi.org/v2/everything?domains=wsj.com&apiKey=b8fc250dcc50454e9d55db485e94c195";
     Response response = await get(Uri.parse(url));
     Map data = jsonDecode(response.body);
 
@@ -46,7 +46,7 @@ class _HomeState extends State<Home> {
 
   getNewsofUK() async {
     String url =
-        'https://newsapi.org/v2/everything?q=apple&from=2022-06-27&to=2022-06-27&sortBy=popularity&apiKey=b8fc250dcc50454e9d55db485e94c195';
+        "https://newsapi.org/v2/everything?q=apple&from=2022-06-27&to=2022-06-27&sortBy=popularity&apiKey=b8fc250dcc50454e9d55db485e94c195";
     Response response = await get(Uri.parse(url));
     Map data = jsonDecode(response.body);
 
@@ -73,8 +73,14 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('News'),
+        backgroundColor: Colors.amber,
+        title: const Text(
+          "The News",
+          style:
+              (TextStyle(color: Colors.black38, fontWeight: FontWeight.bold)),
+        ),
         centerTitle: true,
+        elevation: 5,
       ),
       body: SingleChildScrollView(
         child: Column(
