@@ -323,7 +323,15 @@ class _HomeState extends State<Home> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    Category(Query: "Technology"),
+                              ),
+                            );
+                          },
                           child: const Text('Load More'),
                         ),
                       ],
