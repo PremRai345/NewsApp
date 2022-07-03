@@ -26,6 +26,6 @@ It is the Portfolio App made in Flutter. The API is called from newsapi.org and 
 [MIT License](LICENSE)
 
 # Version when I made this app
-Dart SDK version: 2.17.5
-Flutter: 3.0.3
+1. Dart SDK version: 2.17.5
+2. Flutter: 3.0.3
 
