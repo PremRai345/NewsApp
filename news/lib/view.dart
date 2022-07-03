@@ -28,7 +28,14 @@ class _NewsViewState extends State<NewsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Flutter Food Recipe App"),
+        backgroundColor: Colors.amber,
+        title: const Text(
+          "The News",
+          style:
+              (TextStyle(color: Colors.black38, fontWeight: FontWeight.bold)),
+        ),
+        centerTitle: true,
+        elevation: 5,
       ),
       body: Container(
         child: WebView(
